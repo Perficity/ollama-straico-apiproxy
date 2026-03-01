@@ -18,6 +18,8 @@ else:
         dotenv_log_level = "warning"
 
 from os import environ
+import platform
+from importlib.util import find_spec
 
 from app import app, logging, log_level
 from api_endpoints import lm_studio, ollama, claude
@@ -35,4 +37,17 @@ if __name__ == "__main__":
     is_debug = log_level in ["INFO", "DEBUG"]
     HOST = environ.get("HOST", "0.0.0.0")
     PORT = int(environ.get("PORT", "3214"))
-    uvicorn.run(app, host=HOST, port=PORT, log_level=log_level.lower())
+    uvicorn_kwargs = {
+        "host": HOST,
+        "port": PORT,
+        "log_level": log_level.lower(),
+    }
+
+    # Optimize default runtime settings for local macOS usage.
+    if platform.system() == "Darwin":
+        if find_spec("uvloop") is not None:
+            uvicorn_kwargs["loop"] = "uvloop"
+        if find_spec("httptools") is not None:
+            uvicorn_kwargs["http"] = "httptools"
+
+    uvicorn.run("main:app", **uvicorn_kwargs)
