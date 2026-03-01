@@ -33,6 +33,15 @@ pip install -r requirements-macos-performance.txt
 ```
 
 These extras (`uvloop` and `httptools`) are optional. `main.py` auto-detects them at startup and enables them when available.
+## macOS Optimization
+
+If you run this proxy directly on macOS (without Docker), install `uvloop` and `httptools` for improved local throughput and lower latency:
+
+```bash
+pip install uvloop httptools
+```
+
+The startup script (`main.py`) will automatically detect these packages on macOS and configure Uvicorn to use them. If they are not installed, it falls back to Uvicorn defaults.
 
 ## Usage
 

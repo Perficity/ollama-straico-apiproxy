@@ -6,6 +6,8 @@ except:
     pass
 from importlib.util import find_spec
 from os import environ
+import platform
+from importlib.util import find_spec
 
 from app import app, logging, log_level
 from api_endpoints import lm_studio, ollama, claude
@@ -16,7 +18,6 @@ import uvicorn
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)
     logger.info("Starting the web server")
-    is_debug = log_level in ["INFO", "DEBUG"]
     HOST = environ.get("HOST", "0.0.0.0")
     PORT = int(environ.get("PORT", "3214"))
 
@@ -34,3 +35,11 @@ if __name__ == "__main__":
         uvicorn_kwargs["http"] = "httptools"
 
     uvicorn.run(app, **uvicorn_kwargs)
+    # Optimize default runtime settings for local macOS usage.
+    if platform.system() == "Darwin":
+        if find_spec("uvloop") is not None:
+            uvicorn_kwargs["loop"] = "uvloop"
+        if find_spec("httptools") is not None:
+            uvicorn_kwargs["http"] = "httptools"
+
+    uvicorn.run("main:app", **uvicorn_kwargs)
