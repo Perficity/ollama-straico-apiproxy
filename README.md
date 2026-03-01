@@ -17,6 +17,16 @@ This allows you to use any application that supports Ollama, LMStudio/OpenAI and
 
 Please follow the [Setup Guide](https://github.com/jayrinaldime/ollama-straico-apiproxy/wiki/Deployment-Ollama%E2%80%90straico%E2%80%90apiproxy#basic-deployment).
 
+## macOS Optimization
+
+If you run this proxy directly on macOS (without Docker), install `uvloop` and `httptools` for improved local throughput and lower latency:
+
+```bash
+pip install uvloop httptools
+```
+
+The startup script (`main.py`) will automatically detect these packages on macOS and configure Uvicorn to use them. If they are not installed, it falls back to Uvicorn defaults.
+
 ## Usage
 
 Once the container is running, you can use any Ollama, LMStudio/OpenAI and Anthropic Claude-compatible application by pointing it to the proxy base url. By default the port is 11434 unless modified in the docker-compose.yml file. 
