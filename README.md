@@ -17,6 +17,23 @@ This allows you to use any application that supports Ollama, LMStudio/OpenAI and
 
 Please follow the [Setup Guide](https://github.com/jayrinaldime/ollama-straico-apiproxy/wiki/Deployment-Ollama%E2%80%90straico%E2%80%90apiproxy#basic-deployment).
 
+
+### Local Python install (macOS performance extras)
+
+If you are running this proxy locally on macOS (instead of Docker), install base dependencies first:
+
+```bash
+pip install -r requirements.txt
+```
+
+Then optionally install the macOS runtime optimization extras:
+
+```bash
+pip install -r requirements-macos-performance.txt
+```
+
+These extras (`uvloop` and `httptools`) are optional. `main.py` auto-detects them at startup and enables them when available.
+
 ## Usage
 
 Once the container is running, you can use any Ollama, LMStudio/OpenAI and Anthropic Claude-compatible application by pointing it to the proxy base url. By default the port is 11434 unless modified in the docker-compose.yml file. 
